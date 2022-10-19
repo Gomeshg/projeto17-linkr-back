@@ -36,6 +36,7 @@ CREATE TABLE "sessions"(
     "id"            SERIAL PRIMARY KEY,
     "usersId"       INTEGER REFERENCES "users"("id") NOT NULL ,
     "token"         TEXT NOT NULL,
+    "active"        BOOLEAN DEFAULT TRUE NOT NULL,
     "createDate"    TIMESTAMP DEFAULT NOW() NOT NULL,
     "logoutDate"    TIMESTAMP 
 );
