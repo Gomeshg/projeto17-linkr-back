@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt';
 async function validUser({ res , table , categori, iten , erro }){
     try {
         
-    const rows = await userRepository.getItem({table:table, categori:categori, iten: `'${iten}'` }); 
+    const rows = await userRepository.getItem({table:table, categori:categori, iten: iten }); 
 
     if(rows.length===0)res.sendStatus(erro); 
 
@@ -24,7 +24,6 @@ export async function signInValidation(req, res, next){
 
     const valid = schemas.signinSchema.validate(req.body,{abortEarly: false})
 
-    
     if (valid.error) {
 
         const error = valid.error.details.map(details => details.message);
@@ -33,7 +32,10 @@ export async function signInValidation(req, res, next){
     };
     try {
         
-    const rows = await validUser({res:res,  table: "users" ,categori:"email" , iten:email , erro:401})
+    const rows = await validUser({res:res,  table: "users" ,categori:"email" , iten:`'${email}'` , erro:401})
+
+
+    console.log(valid , rows)
 
     const comparer = bcrypt.compareSync(password, rows[0].passwordHash )
 

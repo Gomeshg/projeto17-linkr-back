@@ -7,6 +7,7 @@ export async function signIn(req, res){
     try {
         const rows = res.localItens 
 
+        console.log(rows)
         const token = uuid();
         
         await userRepository.insert({localItens:`sessions("usersId", token)`, iten:[ rows[0].id, token]}) 
