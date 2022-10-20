@@ -1,8 +1,8 @@
 import { Router } from "express";
-import tredingsRouter from "./trendingsRouter.js";
+import trendingsRouter from "./trendingsRouter.js";
 
 const router = Router();
 
-router.use(tredingsRouter);
+router.use(trendingsRouter);
 
 export default router;

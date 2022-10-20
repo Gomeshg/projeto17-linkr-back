@@ -1,10 +1,18 @@
 import { Router } from "express";
 
-// importar controllers
-import { insert, remove } from "../controllers/trendingsControllers.js";
+import {
+  insert,
+  list,
+  filter,
+  increment,
+  decrement,
+} from "../controllers/trendingsControllers.js";
 
-const tredingsRouter = Router();
+const trendingsRouter = Router();
 
-tredingsRouter.post("/hashtag", insert);
+trendingsRouter.post("/hashtag", insert);
+trendingsRouter.get("/trending", list);
+trendingsRouter.put("/hashtag/add/:id", increment);
+trendingsRouter.put("/hashtag/sub/:id", decrement);
 
-export default tredingsRouter;
+export default trendingsRouter;
