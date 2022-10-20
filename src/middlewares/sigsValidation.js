@@ -62,6 +62,7 @@ export async function signUpValidation(req, res, next){
     
         return res.status(422).send(error);
     };
+
     try {
         
         const rows = await userRepository.getItem({table: "users" ,categori:"email" , iten:`'${email}'` }); 
@@ -73,6 +74,9 @@ export async function signUpValidation(req, res, next){
         next();
 
     } catch (error) {
+        
+        console.log(error)
+
         res.sendStatus(400)
     }
 
