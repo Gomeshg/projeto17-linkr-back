@@ -14,11 +14,11 @@ export default async function (req, res, next){
 
 
     try {
+
         const token = req.headers.authorization.replace('Bearer ', '');
 
         const rows = await userRepository.getItem({table:"sessions", categori:"token", iten: `'${token}'` })
 
-        console.log(rows, " ooooiii")
         if(rows.length===0) return res.sendStatus(401)
 
         res.localItens = rows[0]
