@@ -8,12 +8,12 @@ async function validUser({ res , table , categori, iten , erro }){
         
     const rows = await userRepository.getItem({table:table, categori:categori, iten: iten }); 
 
-    if(rows.length===0)res.sendStatus(erro); 
-
     return rows;
 
     } catch (error) {
+
         res.sendStatus(400)        
+
     }    
 
 }
@@ -34,18 +34,19 @@ export async function signInValidation(req, res, next){
         
     const rows = await validUser({res:res,  table: "users" ,categori:"email" , iten:`'${email}'` , erro:401})
 
-
-    console.log(valid , rows)
+    if(rows.length===0) return res.sendStatus(401);
 
     const comparer = bcrypt.compareSync(password, rows[0].passwordHash )
 
-    if(!comparer) return res.sendStatus(401);
+    if(!comparer ) return res.sendStatus(401);
 
     res.localItens = rows;
 
     next();
     } catch (error) {
+
     res.sendStatus(400)            
+    
     }
 }
 
@@ -67,16 +68,12 @@ export async function signUpValidation(req, res, next){
         
         const rows = await userRepository.getItem({table: "users" ,categori:"email" , iten:`'${email}'` }); 
 
-        console.log(rows)
-
         if(rows.length>0)return res.sendStatus(409); 
         
         next();
 
     } catch (error) {
         
-        console.log(error)
-
         res.sendStatus(400)
     }
 

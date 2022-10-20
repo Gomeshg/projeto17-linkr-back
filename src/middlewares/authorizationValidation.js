@@ -18,13 +18,14 @@ export default async function (req, res, next){
 
         const rows = await userRepository.getItem({table:"sessions", categori:"token", iten: `'${token}'` })
 
+        console.log(rows, " ooooiii")
         if(rows.length===0) return res.sendStatus(401)
 
         res.localItens = rows[0]
 
         next();
     } catch (error) {
-        res.sendStatus(404)
+        res.sendStatus(400)
     }
 
     

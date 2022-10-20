@@ -7,7 +7,6 @@ export async function signIn(req, res){
     try {
         const rows = res.localItens 
 
-        console.log(rows)
         const token = uuid();
         
         await userRepository.insert({localItens:`sessions("usersId", token)`, iten:[ rows[0].id, token]}) 
@@ -15,7 +14,9 @@ export async function signIn(req, res){
         res.send({token: token}).status(200);
     
     } catch (error) {
+    
         res.sendStatus(400);
+    
     }
 
 } 
@@ -33,7 +34,9 @@ export async function signUp(req, res){
         res.sendStatus(201);
     
     } catch (error) {
+    
         res.sendStatus(400);
+    
     }
 
 }
@@ -47,13 +50,16 @@ export async function signValid(req, res){
         const rows = await userRepository.getItem({table:`users`, categori:"id" , iten: obj.usersId })          
 
         if(rows.length===0) return res.sendStatus(400)
+
         delete rows[0].passwordHash;
         delete rows[0].createDate;
-        
+
         res.send(rows[0]).status(201);
     
     } catch (error) {
+
         res.sendStatus(400);
+
     }
 
 }
