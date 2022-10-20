@@ -9,7 +9,7 @@ export async function signIn(req, res){
 
         const token = uuid();
         
-        await userRepository.insert({localItens:`sessions("usersId", token)`, iten:[ rows[0].id, token]}) 
+        await userRepository.insert({localItens:`sessions("userId", token)`, iten:[ rows[0].id, token]}) 
 
         res.send({token: token}).status(200);
     
@@ -47,7 +47,7 @@ export async function signValid(req, res){
 
     try {
 
-        const rows = await userRepository.getItem({table:`users`, categori:"id" , iten: obj.usersId })          
+        const rows = await userRepository.getItem({table:`users`, categori:"id" , iten: obj.userId })          
 
         if(rows.length===0) return res.sendStatus(400)
 
