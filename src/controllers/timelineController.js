@@ -30,10 +30,10 @@ async function getLinks(req, res) {
         LIMIT 20;
     `)
     try {
-        res.status(200).send(links);
+        res.status(200).send(links.rows);
     } catch (error) {
         res.status(500).send(error.message);
     }
 }
 
-export { postLinks };
+export { postLinks, getLinks };
