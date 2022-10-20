@@ -68,6 +68,7 @@ export async function signUpValidation(req, res, next){
         
         const rows = await userRepository.getItem({table: "users" ,categori:"email" , iten:`'${email}'` }); 
 
+        console.log(rows)
         if(rows.length>0)return res.sendStatus(409); 
         
         next();

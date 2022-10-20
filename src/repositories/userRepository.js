@@ -9,7 +9,7 @@ export async function insert({localItens , iten}){
     try {
         
         const {rows} = await connection.query(`INSERT INTO ${localItens} VALUES (${lock.toString()}) RETURNING id ;`, iten )
-        
+
         return rows
         
     } catch (error) {
