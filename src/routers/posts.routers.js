@@ -1,5 +1,5 @@
 import {signUpValidation, signInValidation} from '../middlewares/sigsValidation.js'
-import {signUp , signIn } from '../controllers/posts.js'
+import {signUp , signIn } from '../controllers/sigs.js'
 import express from 'express'
 
 const routPosts = express.Router();
