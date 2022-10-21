@@ -23,23 +23,27 @@ async function postLinks(req, res) {
 };
 
 async function getLinks(req, res) {
-    const links = await connection.query(`
-        SELECT
-            links.likes,
-            links.url,
-            links.text,
-            links."createDate",
-            users."userName",
-            users."pictureUrl"
-        FROM links
-        JOIN users
-            ON links."userId" = users.id
-        ORDER BY "createDate" DESC
-        LIMIT 20;
-    `)
     try {
+
+    const links = await connection.query(`
+   
+    SELECT
+        links.likes,
+        links.url,
+        links.text,
+        links."createDate",
+        users."userName",
+        users."pictureUrl"
+    FROM links
+    JOIN users
+        ON links."userId" = users.id
+    ORDER BY "createDate" DESC
+    LIMIT 20;
+    `)
+
         res.status(200).send(links.rows);
     } catch (error) {
+        console.log(error)
         res.status(500).send(error.message);
     }
 };
