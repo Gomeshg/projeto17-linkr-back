@@ -1,9 +1,9 @@
 import connection from "../database/postgres.js";
 
 async function postLinks(req, res) {
+    const userId = res.localItens.userId;
     const link = req.body;
     let text = link.text;
-    const userId = 1;
 
     if (link.text === "" || link.text === undefined) {
         link.text = null;
