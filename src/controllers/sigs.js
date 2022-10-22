@@ -45,9 +45,16 @@ export async function signValid(req, res){
 
     const obj = res.localItens;
 
+    console.log("obj")
+
+    console.log(obj)
+
     try {
 
-        const rows = await userRepository.getItem({table:`users`, categori:"id" , iten: obj.userId })          
+        const rows = await userRepository.getItem({table:"users", categori:"id" , iten: obj.usersId })   
+        
+        console.log("rows")
+        console.log(rows)
 
         if(rows.length===0) return res.sendStatus(400)
 

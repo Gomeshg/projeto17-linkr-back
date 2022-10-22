@@ -1,4 +1,3 @@
-import routPosts from './routers/posts.routers.js'
 import express, { json } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
