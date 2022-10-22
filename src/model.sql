@@ -43,7 +43,7 @@ CREATE TABLE "sessions"(
 CREATE TABLE "likes"(
     "id"            SERIAL PRIMARY KEY,
     "linkId"        INTEGER REFERENCES "links"("id") NOT NULL,
-    "userId"        INTEGER REFERENCES "users"("id") NOT NULL
+    "userId"        INTEGER REFERENCES "users"("id") NOT NULL,
 );
 
 
