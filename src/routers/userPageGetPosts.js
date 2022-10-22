@@ -1,8 +1,8 @@
 import express from 'express';
-import { getPostsFilteredByUser } from '../controllers/userPage.js';
+import { getPostsFilteredByUser } from '../controllers/userPageController.js';
 
 const router = express.Router();
 
-router.get("/users/:id",getPostsFilteredByUser)
+router.get("/posts/user/:id",getPostsFilteredByUser)
 
 export default router;

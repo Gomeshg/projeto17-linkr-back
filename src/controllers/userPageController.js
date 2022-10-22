@@ -10,4 +10,14 @@ async function getPostsFilteredByUser(req,res){
 
 }
 
-export {getPostsFilteredByUser}
+async function getUserById(req,res){
+
+    const userId = req.params.id;
+
+    const userById = await connection.query(`SELECT * FROM users WHERE "id" = $1;`,[userId]);
+
+    return res.send(userById.rows[0]);
+
+}
+
+export {getPostsFilteredByUser, getUserById}
