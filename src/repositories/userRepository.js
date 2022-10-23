@@ -6,10 +6,11 @@ export async function insert({localItens , iten}){
     for (let index = 0; index < iten.length; index++) {
         lock.push(`$${index+1}`)
     }
+
     try {
         
         const {rows} = await connection.query(`INSERT INTO ${localItens} VALUES (${lock.toString()}) RETURNING id ;`, iten )
-
+      console.log(rows)
         return rows
         
     } catch (error) {
@@ -57,25 +58,27 @@ export async function updateIten({table ,colun ,value, id}){
     }
   }
   
-export async function deleteIten({table,local ,id}){
+export async function deleteLike({userId ,linkId}){
 
     try {
       
-      const {rows} = await connection.query(`DELETE FROM ${table} WHERE $1 = $2;`, [local, id])
-  
+      const {rows} = await connection.query(`DELETE FROM likes WHERE "linkId"=$1 AND "userId"= $2;`, [linkId, userId ])
+      console.log(rows)
       return rows;
       
     } catch (error) {
+      console.log(error)
       return error;    
     }
   }
 
 export async function linksUser({id}){
-
+console.log(id)
     try {
-      
+      if(id){
       const {rows} = await connection.query(`
         SELECT
+        users."userName",
           likes."userId",
           likes."linkId",
           links."createDate",
@@ -83,15 +86,31 @@ export async function linksUser({id}){
         FROM likes
           JOIN links
             ON links.id = likes."linkId"
-          JOIN users
+          LEFT JOIN users
             ON likes."userId" = users.id
             WHERE users.id = $1
-            GROUP BY likes."userId", likes."linkId", links."createDate"
+            GROUP BY likes."userId", likes."linkId", links."createDate",users."userName"
         ORDER BY "createDate" DESC
         LIMIT 20; `, [id])
   
       return rows;
-      
+    }
+    const {rows} = await connection.query(`
+        SELECT
+          users.id AS "IDuser",
+          links.id,
+          users."userName",
+          likes."createDate"
+        FROM likes
+          JOIN links
+            ON links.id = likes."linkId"
+          JOIN users
+            ON likes."userId" = users.id
+            GROUP BY users."userName", likes."createDate",links.id,users.id
+        ORDER BY "createDate" DESC
+        ; `)
+        return rows
+  
     } catch (error) {
       return error;    
     }
@@ -100,22 +119,24 @@ export async function linksUser({id}){
 export async function localizePost({user , id}){
 
 try {
+
+
     
     const {rows} = await connection.query(
-    `  SELECT
-    likes."userId",
-    likes."linkId",
-    COUNT(likes."userId") AS "likes"
-    FROM likes
+    `SELECT
+      likes."userId",
+      likes."linkId",
+      COUNT(likes)
+      FROM likes
       JOIN links
           ON links.id = likes."linkId"
       JOIN users
           ON likes."userId" = users.id
-          WHERE users."id" = $1 links.id = $2 
+          WHERE users."id" = $1 AND links."id" = $2 
           GROUP BY likes."userId", likes."linkId"
-        ;`
-        ,[user, id])
-                return rows;
+        ;`,[user, id]
+        )
+    return rows;
     
 } catch (error) {
     return error;    
