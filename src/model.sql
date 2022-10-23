@@ -12,7 +12,6 @@ CREATE TABLE "users"(
 CREATE TABLE "links"(
     "id"            SERIAL PRIMARY KEY,
     "userId"        INTEGER REFERENCES "users"("id") NOT NULL,
-    "likes"         INTEGER DEFAULT 0 NOT NULL,
     "url"           TEXT NOT NULL,
     "text"          TEXT,
     "createDate"    TIMESTAMP DEFAULT NOW() NOT NULL 
@@ -41,5 +40,13 @@ CREATE TABLE "sessions"(
     "logoutDate"    TIMESTAMP 
 );
 
+CREATE TABLE "likes"(
+    "id"            SERIAL PRIMARY KEY,
+    "linkId"        INTEGER REFERENCES "links"("id") NOT NULL,
+    "userId"        INTEGER REFERENCES "users"("id") NOT NULL,
+);
+
+
+
 DROP DATABASE "linkr";
-DROP TABLE "users","links","trendings","trendingLinks","sessions";
+DROP TABLE "users","links","trendings","trendingLinks","sessions", "likes";

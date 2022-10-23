@@ -70,45 +70,52 @@ export async function deleteIten({table,local ,id}){
     }
   }
 
-export async function verifiIten({user, shortId}){
+export async function linksUser({id}){
 
     try {
       
-      const promis = await connection.query(
-        `SELECT "usersShortens".*
-            FROM "usersShortens" 
-            WHERE  "usersShortens"."usersId" = $1 AND "usersShortens"."shortensId" = $2;`,[user,shortId])
+      const {rows} = await connection.query(`
+        SELECT
+          likes."userId",
+          likes."linkId",
+          links."createDate",
+          COUNT(likes."userId") AS "likes"
+        FROM likes
+          JOIN links
+            ON links.id = likes."linkId"
+          JOIN users
+            ON likes."userId" = users.id
+            WHERE users.id = $1
+            GROUP BY likes."userId", likes."linkId", links."createDate"
+        ORDER BY "createDate" DESC
+        LIMIT 20; `, [id])
   
-      return promis;
+      return rows;
       
     } catch (error) {
       return error;    
     }
   }
 
-export async function somaUsers(user){
+export async function localizePost({user , id}){
 
 try {
     
-    const promis = await connection.query(
-    `SELECT 
-    "usersShortens".id AS "idUsersShortens",
-    "usersShortens"."shortensId" AS "idDoUsersShortens",
-    "usersShortens"."usersId" AS "idDoUsersShortens",
-    shortens.url,
-    shortens.id AS "IDshortens",    
-    shortens."shortUrl" AS "UrlShortens",
-    shortens."visitCount",
-    users.name
-    FROM "usersShortens" 
-            JOIN shortens
-                ON "usersShortens"."shortensId" = shortens.id
-            JOIN users
-                ON "usersShortens"."usersId" = users.id
-            WHERE "usersShortens"."usersId" = $1
-
-                ;`,[user])
-                return promis;
+    const {rows} = await connection.query(
+    `  SELECT
+    likes."userId",
+    likes."linkId",
+    COUNT(likes."userId") AS "likes"
+    FROM likes
+      JOIN links
+          ON links.id = likes."linkId"
+      JOIN users
+          ON likes."userId" = users.id
+          WHERE users."id" = $1 links.id = $2 
+          GROUP BY likes."userId", likes."linkId"
+        ;`
+        ,[user, id])
+                return rows;
     
 } catch (error) {
     return error;    
