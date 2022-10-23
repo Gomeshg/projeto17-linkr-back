@@ -1,12 +1,19 @@
-
 import express, { json } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
+<<<<<<< HEAD
 import timelineRouter from './routers/timelineRouter.js';
 import routGets from './routers/gets.router.js' 
 import routPosts from './routers/posts.routers.js'
 import routDelete from './routers/likes.routers.js'
+=======
+import router from "./routers/indexRouter.js";
+import timelineRouter from "./routers/timelineRouter.js";
+import routGets from "./routers/gets.router.js";
+import routPosts from "./routers/posts.routers.js";
+import routDelete from "./routers/delete.routers.js";
+>>>>>>> e57630dbdf95401b7043ac925dd7aeef21be8eac
 
 dotenv.config();
 
@@ -14,13 +21,15 @@ const server = express();
 server.use(json());
 server.use(cors());
 
-server.use(routPosts)
+server.use(routPosts);
 
-server.use(routGets)
+server.use(router);
+
+server.use(routGets);
 
 server.use(timelineRouter);
 
-server.use(routDelete)
+server.use(routDelete);
 
 server.listen(process.env.PORT, () => {
   console.log("Servidor rodando na porta " + process.env.PORT);
