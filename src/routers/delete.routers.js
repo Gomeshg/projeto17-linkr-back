@@ -1,10 +1,14 @@
-// import authorizationValidation from '../middlewares/authorizationValidation.js';
-// import deleteUrlsId from '../controllers/deleteUrlsId.js';
-// import express from 'express';
+
+import authorizationValidation from '../middlewares/authorizationValidation.js';
+import  deletsValidation   from '../middlewares/deletsValidation.js'
+import deletLike from '../controllers/delets.js'
+import express from 'express';
 
 
-// const routDelete = express.Router();
+const routDelete = express.Router();
 
-// routDelete.delete("/urls/:id",authorizationValidation , deleteUrlsId);
+console.log("oi")
 
-// export default routDelete;
+routDelete.post("/dislike",authorizationValidation, deletsValidation , deletLike);
+
+export default routDelete;
