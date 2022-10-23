@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import timelineRouter from './routers/timelineRouter.js';
 import routGets from './routers/gets.router.js' 
 import routPosts from './routers/posts.routers.js'
-import routDelete from './routers/delete.routers.js'
+import routDelete from './routers/likes.routers.js'
 
 dotenv.config();
 
