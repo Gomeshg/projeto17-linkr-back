@@ -2,18 +2,10 @@ import express, { json } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
-<<<<<<< HEAD
 import timelineRouter from './routers/timelineRouter.js';
 import routGets from './routers/gets.router.js' 
 import routPosts from './routers/posts.routers.js'
 import routDelete from './routers/likes.routers.js'
-=======
-import router from "./routers/indexRouter.js";
-import timelineRouter from "./routers/timelineRouter.js";
-import routGets from "./routers/gets.router.js";
-import routPosts from "./routers/posts.routers.js";
-import routDelete from "./routers/delete.routers.js";
->>>>>>> e57630dbdf95401b7043ac925dd7aeef21be8eac
 
 dotenv.config();
 
