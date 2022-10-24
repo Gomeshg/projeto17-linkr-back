@@ -77,6 +77,7 @@ async function getLinks(req, res) {
             }
         
         }
+        console.log(rows)
         res.status(200).send(rows);
     } catch (error) {
         
