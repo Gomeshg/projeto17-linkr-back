@@ -8,7 +8,36 @@ async function getTrendings() {
 
 async function filterPostsByHashtag(hashtag) {
   return connection.query(
-    `SELECT tl.id, t.id AS "trendingId", t.tag, t.count, l.id AS "linkId", l.likes, l.text, l."userId", u."userName" FROM "trendingLinks" tl JOIN links l ON tl."linkId"=l.id JOIN trendings t ON tl."trendingId"=t.id JOIN users u ON l."userId"=u.id WHERE t.tag=$1 ORDER BY tl.id DESC;`,
+    `
+    SELECT 
+      tl.id, 
+      t.id AS "trendingId", 
+      t.tag, 
+      t.count, 
+      l.id AS "linkId", 
+      l.likes, 
+      l.text, 
+      l."userId", 
+      u."userName" 
+    FROM 
+      "trendingLinks" tl 
+    JOIN 
+      links l 
+    ON 
+      tl."linkId"=l.id 
+    JOIN 
+      trendings t 
+    ON 
+      tl."trendingId"=t.id 
+    JOIN 
+      users u 
+    ON 
+      l."userId"=u.id 
+    WHERE 
+      t.tag=$1 
+    ORDER BY 
+      tl.id 
+    DESC;`,
     [hashtag]
   );
 }

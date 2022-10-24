@@ -45,7 +45,6 @@ CREATE TABLE "likes"(
     "linkId"        INTEGER REFERENCES "links"("id") NOT NULL,
     "userId"        INTEGER REFERENCES "users"("id") NOT NULL,
     "createDate"    TIMESTAMP DEFAULT NOW() NOT NULL 
-
 );
 
 
