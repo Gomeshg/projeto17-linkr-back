@@ -3,6 +3,8 @@ import { authorizationSchema } from "../schemas/schemas.js";
 
 export default async function (req, res, next){
 
+    console.log(req.headers.authorization)
+
     const authorization = authorizationSchema.validate({authorization: req.headers.authorization},{abortEarly: false})
     if (authorization.error) {
 
