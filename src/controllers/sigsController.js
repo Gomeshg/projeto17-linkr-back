@@ -27,6 +27,7 @@ export async function signUp(req, res){
 
     const encrypt = bcrypt.hashSync(password, 10);
 
+    console.log(req, res)
     try {
 
         await userRepository.insert({localItens:`users("userName", email, "pictureUrl", "passwordHash" )`, iten:[name, email, pictureUrl,encrypt]} )              

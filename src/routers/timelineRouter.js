@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { getLinks, postLinks } from '../controllers/timelineController.js';
+import { deleteLink, getLinks, postLinks } from '../controllers/timelineController.js';
 import authorizationValidation from '../middlewares/authorizationValidation.js';
 import { isItUrl } from '../middlewares/timelineValidation.js';
 
@@ -18,5 +18,10 @@ timelineRouter.get(
     authorizationValidation,
     getLinks
 );
+
+timelineRouter.delete(
+    '/deleteTimeline/:id',
+    deleteLink
+ ); 
 
 export default timelineRouter;

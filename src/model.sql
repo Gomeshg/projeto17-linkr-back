@@ -33,7 +33,7 @@ CREATE TABLE "trendingLinks"(
 
 CREATE TABLE "sessions"(
     "id"            SERIAL PRIMARY KEY,
-    "userId"       INTEGER REFERENCES "users"("id") NOT NULL ,
+    "userId"        INTEGER REFERENCES "users"("id") NOT NULL ,
     "token"         TEXT NOT NULL,
     "active"        BOOLEAN DEFAULT TRUE NOT NULL,
     "createDate"    TIMESTAMP DEFAULT NOW() NOT NULL,
@@ -43,7 +43,9 @@ CREATE TABLE "sessions"(
 CREATE TABLE "likes"(
     "id"            SERIAL PRIMARY KEY,
     "linkId"        INTEGER REFERENCES "links"("id") NOT NULL,
-    "userId"        INTEGER REFERENCES "users"("id") NOT NULL
+    "userId"        INTEGER REFERENCES "users"("id") NOT NULL,
+    "createDate"    TIMESTAMP DEFAULT NOW() NOT NULL 
+
 );
 
 

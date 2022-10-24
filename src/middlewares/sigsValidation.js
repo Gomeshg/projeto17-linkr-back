@@ -2,8 +2,7 @@ import * as userRepository  from '../repositories/userRepository.js';
 import * as schemas from '../schemas/schemas.js';
 import bcrypt from 'bcrypt';
 
-// função tentativa de refatoração //
-async function validUser({ res , table , categori, iten , erro }){
+async function validUser({ res , table , categori, iten }){
     try {
         
     const rows = await userRepository.getItem({table:table, categori:categori, iten: iten }); 
@@ -68,7 +67,6 @@ export async function signUpValidation(req, res, next){
         
         const rows = await userRepository.getItem({table: "users" ,categori:"email" , iten:`'${email}'` }); 
 
-        console.log(rows)
         if(rows.length>0)return res.sendStatus(409); 
         
         next();

@@ -3,8 +3,9 @@ import { authorizationSchema } from "../schemas/schemas.js";
 
 export default async function (req, res, next){
 
+    console.log(req.headers.authorization)
+
     const authorization = authorizationSchema.validate({authorization: req.headers.authorization},{abortEarly: false})
-    console.log(authorization)
     if (authorization.error) {
 
         const error = authorization.error.details.map(details => details.message);
@@ -16,9 +17,6 @@ export default async function (req, res, next){
 
     const rows = await userRepository.getItem({table:"sessions", categori:"token", iten: `'${token}'` })
 
-    console.log(rows)
-
-
     try {
 
        
@@ -28,7 +26,6 @@ export default async function (req, res, next){
         
         next();
     } catch (error) {
-        console.log(error)
         res.sendStatus(400)
     }
 
