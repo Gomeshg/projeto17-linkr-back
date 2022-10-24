@@ -15,6 +15,7 @@ timelineRouter.post(
 
 timelineRouter.get(
     '/timeline',
+    authorizationValidation,
     getLinks
 );
 

@@ -25,10 +25,14 @@ async function postLinks(req, res) {
 };
 
 async function getLinks(req, res) {
+
+
     const user = res.localItens;
 
     try {
+
         const {rows} = await connection.query(`
+    
         SELECT
             COUNT(likes."linkId") AS "likes",
             links.id,
@@ -52,7 +56,6 @@ async function getLinks(req, res) {
             ORDER BY "createDate" DESC
             LIMIT 20;`
         )
-        
         const links = await userRepository.linksUser({id:user.userId});
         
         const link2 = await userRepository.linksUser({});
@@ -74,6 +77,7 @@ async function getLinks(req, res) {
             }
         
         }
+        console.log(rows)
         res.status(200).send(rows);
     } catch (error) {
         
