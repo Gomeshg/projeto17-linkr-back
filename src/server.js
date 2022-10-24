@@ -4,9 +4,8 @@ import dotenv from "dotenv";
 
 import router from "./routers/indexRouter.js";
 import timelineRouter from "./routers/timelineRouter.js";
-import routGets from "./routers/gets.router.js";
-import routPosts from "./routers/posts.routers.js";
-import routDelete from "./routers/delete.routers.js";
+import sigsRout from "./routers/sigs.router.js";
+import likesRout from "./routers/likes.routers.js";
 
 dotenv.config();
 
@@ -14,15 +13,13 @@ const server = express();
 server.use(json());
 server.use(cors());
 
-server.use(routPosts);
-
 server.use(router);
 
-server.use(routGets);
+server.use(sigsRout);
 
 server.use(timelineRouter);
 
-server.use(routDelete);
+server.use(likesRout);
 
 server.listen(process.env.PORT, () => {
   console.log("Servidor rodando na porta " + process.env.PORT);

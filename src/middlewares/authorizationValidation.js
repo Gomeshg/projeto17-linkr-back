@@ -24,7 +24,6 @@ export default async function (req, res, next){
         
         next();
     } catch (error) {
-        console.log(error)
         res.sendStatus(400)
     }
 

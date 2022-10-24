@@ -6,12 +6,12 @@ export async function validLike(req,res, next){
             res.localItens = {userId:res.localItens.userId, linkId: req.body.id   };
             
             next()
+
     } catch (error) {
-        console.log(error)
+
         res.sendStatus(400)
+
     }
-
-
 }
 
 export async function validDeslike(req, res, next){

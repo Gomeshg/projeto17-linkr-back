@@ -4,11 +4,11 @@ import {deletLike, like } from '../controllers/liksController.js'
 import express from 'express';
 
 
-const routDelete = express.Router();
+const likesRout = express.Router();
 
-routDelete.post("/dislike",authorizationValidation, validDeslike , deletLike);
+likesRout.post("/dislike",authorizationValidation, validDeslike , deletLike);
 
-routDelete.post("/like",authorizationValidation, validLike , like);
+likesRout.post("/like",authorizationValidation, validLike , like);
 
 
-export default routDelete;
+export default likesRout;

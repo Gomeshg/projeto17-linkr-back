@@ -10,7 +10,6 @@ export async function insert({localItens , iten}){
     try {
         
         const {rows} = await connection.query(`INSERT INTO ${localItens} VALUES (${lock.toString()}) RETURNING id ;`, iten )
-      console.log(rows)
         return rows
         
     } catch (error) {
@@ -63,17 +62,17 @@ export async function deleteLike({userId ,linkId}){
     try {
       
       const {rows} = await connection.query(`DELETE FROM likes WHERE "linkId"=$1 AND "userId"= $2;`, [linkId, userId ])
-      console.log(rows)
+      
       return rows;
       
     } catch (error) {
-      console.log(error)
+      
       return error;    
     }
   }
 
 export async function linksUser({id}){
-console.log(id)
+
     try {
       if(id){
       const {rows} = await connection.query(`
@@ -141,50 +140,5 @@ try {
 } catch (error) {
     return error;    
 }
-}
-
-export async function rank(){
-
-try {
-    
-    const promis = await connection.query(
-    `SELECT 
-    users.id,
-    users.name,
-    COUNT(shortens) AS "linksCount",
-    SUM(shortens."visitCount") AS "visitCount"
-    FROM "usersShortens" 
-        JOIN users
-                ON "usersShortens"."usersId" = users.id
-        JOIN shortens
-                ON "usersShortens"."shortensId" = shortens.id
-        GROUP BY users.id 
-        ORDER BY "visitCount" DESC LIMIT 10
-        ;`)
-
-    return promis;
-    
-} catch (error) {
-    return error;    
-}
-}
-
-export async function timeDel(){
-  try {
-
-      const list = await getList('sessions' , "")
-      
-      list.map(async(value)=>{
-
-        if( Number(Date.now() - value.createdAt.getTime()) > 360000 ){
-        await deleteIten('sessions', "id", value.id)} 
-      })
-
-      
-  } catch (error) {
-      console.log(error)
-  }
-
-
 }
 

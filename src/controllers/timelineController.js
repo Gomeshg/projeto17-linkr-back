@@ -6,7 +6,6 @@ async function postLinks(req, res) {
     let text = link.text;
     const userId = res.localItens.userId;
 
-    console.log(req.body)
     if (link.text === "" || link.text === undefined) {
         link.text = null;
     };
@@ -78,10 +77,9 @@ async function getLinks(req, res) {
             }
         
         }
-        console.log(rows, link2)
         res.status(200).send(rows);
     } catch (error) {
-        console.log(error)
+        
         res.status(500).send(error.message);
     }
 };
