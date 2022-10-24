@@ -85,7 +85,25 @@ async function getLinks(req, res) {
     }
 };
 
+async function deleteLink(req, res) {
+    const id = req.params.id;
+    const { auth } = req.headers;
+    const token = auth?.replace('Bearer ', '');
+  
+    const rows = await userRepository.getItem({table:"sessions", categori:"token", iten: `'${token}'` })
+  
+    try {
+        await connection.query(`
+            DELETE FROM links
+            WHERE id = $1
+            `, [id]
+        );
+        res.sendStatus(200);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+ }
+ 
 
 
-
-export { postLinks, getLinks };
+export { postLinks, getLinks, deleteLink };
