@@ -38,7 +38,8 @@ async function getLinks(req, res) {
             links.text,
             links."createDate",
             users."userName",
-            users."pictureUrl"
+            users."pictureUrl",
+            users.id AS "userId"
         FROM links
             JOIN users
                 ON links."userId" = users.id
@@ -50,7 +51,8 @@ async function getLinks(req, res) {
                 links.text,
                 links."createDate",
                 users."userName",
-                users."pictureUrl"
+                users."pictureUrl",
+                users.id
             ORDER BY "createDate" DESC
             LIMIT 20;`);
 
