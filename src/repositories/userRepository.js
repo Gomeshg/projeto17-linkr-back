@@ -96,6 +96,7 @@ export async function linksUser({id}){
     }
     const {rows} = await connection.query(`
         SELECT
+          users."pictureUrl",
           users.id AS "IDuser",
           links.id,
           users."userName",
@@ -105,7 +106,7 @@ export async function linksUser({id}){
             ON links.id = likes."linkId"
           JOIN users
             ON likes."userId" = users.id
-            GROUP BY users."userName", likes."createDate",links.id,users.id
+            GROUP BY users."userName", likes."createDate",users."pictureUrl",links.id,users.id
         ORDER BY "createDate" DESC
         ; `)
         return rows
