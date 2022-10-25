@@ -12,8 +12,17 @@ async function insert(req, res) {
         .send(validation.error.details.map((item) => item.message));
     }
 
-    await trendingsRepository.insertHashtag(validation.value);
-    return res.sendStatus(201);
+    const thereIsHashtag = await trendingsRepository.verifyHashtag(
+      validation.value.hashtag
+    );
+
+    if (thereIsHashtag.rows.length === 0) {
+      await trendingsRepository.insertHashtag(validation.value.hashtag);
+    } else {
+      await trendingsRepository.incrementHashtag(thereIsHashtag.rows[0].id);
+    }
+
+    return res.sendStatus(200);
   } catch (e) {
     return res.status(500).send(e.messages);
   }
@@ -46,36 +55,36 @@ async function filter(req, res) {
   }
 }
 
-async function increment(req, res) {
-  const { id } = req.params;
+// async function increment(req, res) {
+//   const { id } = req.params;
 
-  try {
-    const thereIsId = await trendingsRepository.verifyId(id);
-    if (thereIsId.rows.length === 0) {
-      return res.sendStatus(404);
-    }
+//   try {
+//     const thereIsId = await trendingsRepository.verifyId(id);
+//     if (thereIsId.rows.length === 0) {
+//       return res.sendStatus(404);
+//     }
 
-    await trendingsRepository.incrementHashtag(id);
-    return res.sendStatus(200);
-  } catch (e) {
-    return res.status(500).send(e.message);
-  }
-}
+//     await trendingsRepository.incrementHashtag(id);
+//     return res.sendStatus(200);
+//   } catch (e) {
+//     return res.status(500).send(e.message);
+//   }
+// }
 
-async function decrement(req, res) {
-  const { id } = req.params;
+// async function decrement(req, res) {
+//   const { id } = req.params;
 
-  try {
-    const thereIsId = await trendingsRepository.verifyId(id);
-    if (thereIsId.rows.length === 0) {
-      return res.sendStatus(404);
-    }
+//   try {
+//     const thereIsId = await trendingsRepository.verifyId(id);
+//     if (thereIsId.rows.length === 0) {
+//       return res.sendStatus(404);
+//     }
 
-    await trendingsRepository.decrementHashtag(id);
-    return res.sendStatus(200);
-  } catch (e) {
-    return res.status(500).send(e.message);
-  }
-}
+//     await trendingsRepository.decrementHashtag(id);
+//     return res.sendStatus(200);
+//   } catch (e) {
+//     return res.status(500).send(e.message);
+//   }
+// }
 
-export { insert, list, filter, increment, decrement };
+export { insert, list, filter };

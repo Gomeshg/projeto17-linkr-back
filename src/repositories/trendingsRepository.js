@@ -58,8 +58,8 @@ async function decrementHashtag(id) {
   ]);
 }
 
-async function verifyId(id) {
-  return connection.query("SELECT id FROM trendings WHERE id=$1;", [id]);
+async function verifyHashtag(hashtag) {
+  return connection.query("SELECT id FROM trendings WHERE tag=$1;", [hashtag]);
 }
 const trendingsRepository = {
   getTrendings,
@@ -67,7 +67,7 @@ const trendingsRepository = {
   insertHashtag,
   incrementHashtag,
   decrementHashtag,
-  verifyId,
+  verifyHashtag,
 };
 
 export default trendingsRepository;
