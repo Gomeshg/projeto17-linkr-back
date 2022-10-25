@@ -109,4 +109,16 @@ async function deleteLink(req, res) {
   }
 }
 
-export { postLinks, getLinks, deleteLink };
+async function getLastLinkId() {
+  try {
+    const id = await connection.query(
+      `SELECT id FROM links ORDER BY "createDate" DESC LIMIT 1;`
+    );
+
+    return res.status(200).send(id);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+}
+
+export { postLinks, getLinks, deleteLink, getLastLinkId };

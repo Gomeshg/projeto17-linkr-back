@@ -55,36 +55,25 @@ async function filter(req, res) {
   }
 }
 
-// async function increment(req, res) {
-//   const { id } = req.params;
+async function relationateLinkWithHashtag(req, res) {
+  const { linkId, hashtagId } = req.body;
 
-//   try {
-//     const thereIsId = await trendingsRepository.verifyId(id);
-//     if (thereIsId.rows.length === 0) {
-//       return res.sendStatus(404);
-//     }
+  try {
+    await trendingsRepository.relationateLinkWithHashtag(linkId, hashtagId);
+    return res.sendStatus(200);
+  } catch (e) {
+    return res.status(500).send(e.message);
+  }
+}
 
-//     await trendingsRepository.incrementHashtag(id);
-//     return res.sendStatus(200);
-//   } catch (e) {
-//     return res.status(500).send(e.message);
-//   }
-// }
+async function getLastHashtagId(req, res) {
+  try {
+    const id = await trendingsRepository.getLastHashtagId();
 
-// async function decrement(req, res) {
-//   const { id } = req.params;
+    return res.status(200).send(id);
+  } catch (e) {
+    return res.status(500).send(e.message);
+  }
+}
 
-//   try {
-//     const thereIsId = await trendingsRepository.verifyId(id);
-//     if (thereIsId.rows.length === 0) {
-//       return res.sendStatus(404);
-//     }
-
-//     await trendingsRepository.decrementHashtag(id);
-//     return res.sendStatus(200);
-//   } catch (e) {
-//     return res.status(500).send(e.message);
-//   }
-// }
-
-export { insert, list, filter };
+export { insert, list, filter, relationateLinkWithHashtag, getLastHashtagId };

@@ -61,6 +61,20 @@ async function decrementHashtag(id) {
 async function verifyHashtag(hashtag) {
   return connection.query("SELECT id FROM trendings WHERE tag=$1;", [hashtag]);
 }
+
+async function relationateLinkWithHashtag(linkId, trendingId) {
+  return connection.query(
+    `INSERT INTO "trendingsLinks"("linkId", "trendingId") VALUES($1, $2);`,
+    [linkId, trendingId]
+  );
+}
+
+async function getLastHashtagId() {
+  return connection.query(
+    `SELECT id FROM trendings ORDER BY "createDate" DESC LIMIT 1;`
+  );
+}
+
 const trendingsRepository = {
   getTrendings,
   filterPostsByHashtag,
@@ -68,6 +82,8 @@ const trendingsRepository = {
   incrementHashtag,
   decrementHashtag,
   verifyHashtag,
+  relationateLinkWithHashtag,
+  getLastHashtagId,
 };
 
 export default trendingsRepository;
