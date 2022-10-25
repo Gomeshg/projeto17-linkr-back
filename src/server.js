@@ -6,6 +6,8 @@ import router from "./routers/indexRouter.js";
 import timelineRouter from "./routers/timelineRouter.js";
 import sigsRout from "./routers/sigs.router.js";
 import likesRout from "./routers/likes.routers.js";
+import userPostsRouter from "./routers/userPostsRouter.js";
+import userInfoRouter from './routers/userInfoRouter.js';
 // import routeGetUsersHeader from './routers/headerGetFilteredUsers.js';
 
 dotenv.config();
@@ -21,6 +23,10 @@ server.use(sigsRout);
 server.use(timelineRouter);
 
 server.use(likesRout);
+
+server.use(userPostsRouter);
+
+server.use(userInfoRouter);
 
 // server.use(routeGetUsersHeader);
 
