@@ -97,6 +97,10 @@ async function deleteLink(req, res) {
     iten: `'${token}'`,
   });
 
+  if (!rows) {
+    return res.status(401).send("Sessão não encontrada, favor relogar.");
+  }
+
   try {
     await connection.query(
       `
@@ -118,9 +122,41 @@ async function getLastLinkId() {
     );
 
     return res.status(200).send(id);
+  } catch (e) {
+    return res.status(500).send(e.message);
+  }
+}
+
+async function updateLink(req, res) {
+  const id = req.params.id;
+  const text = req.body.text;
+
+  const { auth } = req.headers;
+  const token = auth?.replace("Bearer ", "");
+
+  const rows = await userRepository.getItem({
+    table: "sessions",
+    categori: "token",
+    iten: `'${token}'`,
+  });
+
+  if (!rows) {
+    return res.status(401).send("Sessão não encontrada, favor relogar.");
+  }
+
+  try {
+    await connection.query(
+      `
+      UPDATE links
+      SET text = $1
+      WHERE id = $2
+      `,
+      [text, id]
+    );
+    res.sendStatus(200);
   } catch (error) {
     res.status(500).send(error.message);
   }
 }
 
-export { postLinks, getLinks, deleteLink, getLastLinkId };
+export { postLinks, getLinks, deleteLink, updateLink, getLastLinkId };
