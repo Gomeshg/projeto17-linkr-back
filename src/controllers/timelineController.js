@@ -99,7 +99,7 @@ async function deleteLink(req, res) {
 
   if (!rows) {
     return res.status(401).send("Sessão não encontrada, favor relogar.");
-  };
+  }
 
   try {
     await connection.query(
@@ -112,6 +112,18 @@ async function deleteLink(req, res) {
     res.sendStatus(200);
   } catch (error) {
     res.status(500).send(error.message);
+  }
+}
+
+async function getLastLinkId() {
+  try {
+    const id = await connection.query(
+      `SELECT id FROM links ORDER BY "createDate" DESC LIMIT 1;`
+    );
+
+    return res.status(200).send(id);
+  } catch (e) {
+    return res.status(500).send(e.message);
   }
 }
 
@@ -130,14 +142,16 @@ async function updateLink(req, res) {
 
   if (!rows) {
     return res.status(401).send("Sessão não encontrada, favor relogar.");
-  };
+  }
 
   try {
-    await connection.query(`
+    await connection.query(
+      `
       UPDATE links
       SET text = $1
       WHERE id = $2
-      `, [text, id]
+      `,
+      [text, id]
     );
     res.sendStatus(200);
   } catch (error) {
@@ -145,4 +159,4 @@ async function updateLink(req, res) {
   }
 }
 
-export { postLinks, getLinks, deleteLink, updateLink };
+export { postLinks, getLinks, deleteLink, updateLink, getLastLinkId };

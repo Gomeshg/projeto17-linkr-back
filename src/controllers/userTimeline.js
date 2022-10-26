@@ -34,15 +34,9 @@ async function getPostsFilteredByUser(req,res){
             ORDER BY "createDate" DESC
             LIMIT 20;`,[userId]);
 
-            console.log(myUser)
-
             const links = await userRepository.linksUser({ id: myUser.userId });
 
             const link2 = await userRepository.linksUser({});
-            console.log(userId)
-            console.log(links)
-            console.log(link2)
-    console.log( rows)
 
             link2.map((value) => {
               delete value.createDate;
@@ -64,9 +58,6 @@ async function getPostsFilteredByUser(req,res){
               }
 
             }
-            console.log(links)
-            console.log(link2)
-    console.log( rows)
     return res.send(rows)
 
 }
@@ -75,7 +66,11 @@ async function getUserInfo(req,res){
 
     const userId = req.params.id;
 
+    const myUser = res.localItens
+
     const userInfo = await connection.query(`SELECT "userName" FROM users WHERE "id" = $1;`,[userId]);
+
+    userInfo.rows[0]["id"]=myUser.userId
 
     return res.send(userInfo.rows)
 
