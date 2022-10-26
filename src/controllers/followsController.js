@@ -1,6 +1,6 @@
 import * as userRepository from '../repositories/userRepository.js' 
 
-export default async function followController(req,res){
+export async function followUnfollow(req,res){
     const { id } = req.params;
 
     const {userId} = res.localItens
@@ -21,11 +21,27 @@ export default async function followController(req,res){
         
             return res.sendStatus(200)
         }
-        console.log("OIII")
 
         await userRepository.deleteFollow({userId:userId,following:id})
 
         res.sendStatus(200)
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(400)
+    }
+}
+
+export async function follows(req,res){
+    const { id } = req.params;
+
+    const {userId} = res.localItens
+    console.log(id, userId)
+
+    try {
+        const rows = await userRepository.getItemFollow({userId:userId,following:id})
+        console.log(rows)
+        
+        res.send(rows).status(200)
     } catch (error) {
         console.log(error)
         res.sendStatus(400)
