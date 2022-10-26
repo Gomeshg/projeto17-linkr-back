@@ -9,6 +9,7 @@ import likesRout from "./routers/likes.routers.js";
 import userPostsRouter from "./routers/userPostsRouter.js";
 import userInfoRouter from './routers/userInfoRouter.js';
 import routeGetUsersHeader from './routers/headerGetFilteredUsers.js';
+import followRouter from "./routers/followsRout.js";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ server.use(userInfoRouter);
 
 server.use(routeGetUsersHeader);
 
+server.use(followRouter)
 // server.use(routeGetUsersHeader);
 
 server.listen(process.env.PORT, () => {
