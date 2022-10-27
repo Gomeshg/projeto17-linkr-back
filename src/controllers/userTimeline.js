@@ -49,8 +49,6 @@ async function getPostsFilteredByUser(req, res) {
     }
   }
   return res.send(rows);
-
-  return res.send(rows);
 }
 
 async function getUserInfo(req, res) {
@@ -64,8 +62,6 @@ async function getUserInfo(req, res) {
   );
 
   userInfo.rows[0]["id"] = myUser.userId;
-
-  return res.send(userInfo.rows);
 
   return res.send(userInfo.rows);
 }
