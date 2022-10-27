@@ -46,7 +46,7 @@ async function getLinks(req, res) {
           ON links.id = likes."linkId"
       JOIN followers
           ON followers.following = users.id
-      WHERE followers."userId" = $1
+      WHERE followers."userId" = $1 OR users.id=$2
         GROUP BY
         links.id,
         links.url,
@@ -56,7 +56,7 @@ async function getLinks(req, res) {
         users."pictureUrl",
         users.id
     ORDER BY "createDate" DESC
-    LIMIT 20;`,[user.userId]);
+    LIMIT 20;`,[user.userId, user.userId]);
 
     if(rows.length===0)return res.status(200).send(rows)
 
