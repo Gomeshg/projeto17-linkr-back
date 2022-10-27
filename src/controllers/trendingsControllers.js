@@ -70,14 +70,16 @@ async function relationateLinkWithHashtag(req, res) {
   }
 }
 
-async function getLastHashtagId(req, res) {
-  try {
-    const id = await trendingsRepository.getLastHashtagId();
+async function getHashtagId(req, res) {
+  const { hashtag } = req.params;
 
-    return res.status(200).send(id);
+  try {
+    const data = await trendingsRepository.getHashtagId(hashtag);
+
+    return res.status(200).send(data);
   } catch (e) {
     return res.status(500).send(e.message);
   }
 }
 
-export { insert, list, filter, relationateLinkWithHashtag, getLastHashtagId };
+export { insert, list, filter, relationateLinkWithHashtag, getHashtagId };

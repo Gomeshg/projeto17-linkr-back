@@ -5,7 +5,7 @@ import {
   list,
   filter,
   relationateLinkWithHashtag,
-  getLastHashtagId,
+  getHashtagId,
 } from "../controllers/trendingsControllers.js";
 import authorizationValidation from "../middlewares/authorizationValidation.js";
 
@@ -16,7 +16,11 @@ trendingsRouter.get("/trending", authorizationValidation, list);
 
 trendingsRouter.get("/hashtag/:hashtag", authorizationValidation, filter);
 
-trendingsRouter.get("/lastHashtag", authorizationValidation, getLastHashtagId);
+trendingsRouter.get(
+  "/oneHashtag/:hashtag",
+  authorizationValidation,
+  getHashtagId
+);
 trendingsRouter.post(
   "/relationateLinkWithHashtag",
   authorizationValidation,

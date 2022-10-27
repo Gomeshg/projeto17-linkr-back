@@ -52,9 +52,11 @@ async function insertHashtag(hashtag) {
 }
 
 async function incrementHashtag(id) {
-  return connection.query("UPDATE trendings SET count=count+1 WHERE id=$1;", [
-    id,
-  ]);
+  const newDate = new Date();
+  return connection.query(
+    `UPDATE trendings SET count=count+1, "createDate"=$2 WHERE id=$1;`,
+    [id, newDate]
+  );
 }
 
 async function decrementHashtag(id) {
@@ -74,10 +76,10 @@ async function relationateLinkWithHashtag(linkId, trendingId) {
   );
 }
 
-async function getLastHashtagId() {
-  return connection.query(
-    `SELECT id FROM trendings ORDER BY "createDate" DESC LIMIT 1;`
-  );
+async function getHashtagId(hashtag) {
+  return connection.query(`SELECT id, tag FROM trendings WHERE tag=$1;`, [
+    hashtag,
+  ]);
 }
 
 const trendingsRepository = {
@@ -88,7 +90,7 @@ const trendingsRepository = {
   decrementHashtag,
   verifyHashtag,
   relationateLinkWithHashtag,
-  getLastHashtagId,
+  getHashtagId,
 };
 
 export default trendingsRepository;
