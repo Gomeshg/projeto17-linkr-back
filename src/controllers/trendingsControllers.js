@@ -3,7 +3,7 @@ import trendingsRepository from "../repositories/trendingsRepository.js";
 
 async function insert(req, res) {
   // const { hashtag } = req.body;
-
+  console.log("IIIIINNNNNNNNNNSSSSSSSSEEEEEEEEEEERRRRRRRRRRTTTTTTTTTTT");
   try {
     const validation = hashtagSchema.validate(req.body, { abortEarly: false });
     if (validation.error) {
@@ -12,6 +12,7 @@ async function insert(req, res) {
         .send(validation.error.details.map((item) => item.message));
     }
 
+    console.log(validation.value.hashtag);
     const thereIsHashtag = await trendingsRepository.verifyHashtag(
       validation.value.hashtag
     );
@@ -24,6 +25,8 @@ async function insert(req, res) {
 
     return res.sendStatus(200);
   } catch (e) {
+    console.log(`Entrei no catch`);
+    console.log(e);
     return res.status(500).send(e.messages);
   }
 }
@@ -56,8 +59,9 @@ async function filter(req, res) {
 }
 
 async function relationateLinkWithHashtag(req, res) {
+  console.log("ENTROU NO RELATIONATE");
   const { linkId, hashtagId } = req.body;
-
+  console.log(req.body);
   try {
     await trendingsRepository.relationateLinkWithHashtag(linkId, hashtagId);
     return res.sendStatus(200);

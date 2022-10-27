@@ -15,7 +15,8 @@ async function filterPostsByHashtag(hashtag) {
       t.tag, 
       t.count, 
       l.id AS "linkId", 
-      l.likes, 
+      l.url,
+      l.text,
       l.text, 
       l."userId", 
       u."userName" 
@@ -33,6 +34,10 @@ async function filterPostsByHashtag(hashtag) {
       users u 
     ON 
       l."userId"=u.id 
+    JOIN
+      likes lk
+    ON  
+      l.id=lk."linkId"
     WHERE 
       t.tag=$1 
     ORDER BY 
@@ -64,7 +69,7 @@ async function verifyHashtag(hashtag) {
 
 async function relationateLinkWithHashtag(linkId, trendingId) {
   return connection.query(
-    `INSERT INTO "trendingsLinks"("linkId", "trendingId") VALUES($1, $2);`,
+    `INSERT INTO "trendingLinks"("linkId", "trendingId") VALUES($1, $2);`,
     [linkId, trendingId]
   );
 }

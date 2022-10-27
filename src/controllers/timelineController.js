@@ -25,7 +25,6 @@ async function postLinks(req, res) {
 }
 
 async function getLinks(req, res) {
-  console.log("ENTROU NO GET LINKS");
   const user = res.localItens;
 
   try {
@@ -115,7 +114,7 @@ async function deleteLink(req, res) {
   }
 }
 
-async function getLastLinkId() {
+async function getLastLinkId(req, res) {
   try {
     const id = await connection.query(
       `SELECT id FROM links ORDER BY "createDate" DESC LIMIT 1;`
