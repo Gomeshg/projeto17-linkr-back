@@ -18,6 +18,18 @@ export async function insert({localItens , iten}){
       }
 }
 
+export async function getItemFollow({userId, following }){
+  try {
+            const {rows} = await connection.query(`SELECT * FROM followers WHERE followers."userId"= $1 AND followers.following= $2;`,[userId,following ])
+            
+            return rows;
+        
+    } catch (error) {
+      return error;
+    }
+}
+
+
 export async function getItem({table , categori, iten}){
   try {
             const {rows} = await connection.query(`SELECT * FROM ${table} WHERE ${categori}=${iten} ;`)
@@ -56,7 +68,23 @@ export async function updateIten({table ,colun ,value, id}){
       return error;    
     }
   }
-  
+
+  export async function deleteFollow({userId ,following}){
+
+    try {
+      
+      const {rows} = await connection.query(`DELETE FROM followers WHERE "userId"= $1 AND following=$2 ;`, [ userId, following ])
+      
+      return rows;
+      
+    } catch (error) {
+      
+      return error;    
+    }
+  }
+
+
+
 export async function deleteLike({userId ,linkId}){
 
     try {

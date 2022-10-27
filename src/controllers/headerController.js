@@ -8,6 +8,8 @@ async function getUsersFilteredByChars(req,res){
 
     const usersFilteredByChars = await connection.query(`SELECT * FROM users WHERE "userName" ILIKE $1;`,[`%${partOfUsername}%`]);
 
+
+
     return res.send(usersFilteredByChars.rows)
 
 }
