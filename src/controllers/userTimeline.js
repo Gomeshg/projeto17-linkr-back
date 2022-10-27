@@ -40,11 +40,6 @@ async function getPostsFilteredByUser(req, res) {
 
   const link2 = await userRepository.linksUser({});
 
-  link2.map((value) => {
-    delete value.createDate;
-    return value;
-  });
-
   for (let index = 0; index < rows.length; index++) {
     rows[index]["likeUser"] = [];
     for (let i = 0; i < links.length; i++) {
@@ -52,13 +47,8 @@ async function getPostsFilteredByUser(req, res) {
         rows[index]["boolean"] = true;
       }
     }
-
-    for (let i = 0; i < link2.length; i++) {
-      if (rows[index].id === link2[i].id) {
-        rows[index].likeUser.push(link2[i].userName);
-      }
-    }
   }
+  return res.send(rows);
 
   return res.send(rows);
 }
@@ -66,10 +56,16 @@ async function getPostsFilteredByUser(req, res) {
 async function getUserInfo(req, res) {
   const userId = req.params.id;
 
+  const myUser = res.localItens;
+
   const userInfo = await connection.query(
     `SELECT "userName" FROM users WHERE "id" = $1;`,
     [userId]
   );
+
+  userInfo.rows[0]["id"] = myUser.userId;
+
+  return res.send(userInfo.rows);
 
   return res.send(userInfo.rows);
 }
