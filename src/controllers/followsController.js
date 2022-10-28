@@ -31,11 +31,25 @@ export async function followUnfollow(req,res){
     }
 }
 
+export async function allFollows(req,res){
+
+    const {userId} = res.localItens
+    
+    try {
+        const rows = await userRepository.getItem({table:"followers" ,categori:`followers."userId"` ,iten:userId})
+        
+        res.send(rows).status(200)
+    } catch (error) {
+        res.sendStatus(400)
+    }
+}
+
+
 export async function follows(req,res){
     const { id } = req.params;
 
     const {userId} = res.localItens
-    console.log(id, userId)
+    console.log(req.body)
 
     try {
         const rows = await userRepository.getItemFollow({userId:userId,following:id})

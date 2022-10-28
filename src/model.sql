@@ -13,6 +13,7 @@ CREATE TABLE "links"(
     "id"            SERIAL PRIMARY KEY,
     "userId"        INTEGER REFERENCES "users"("id") NOT NULL,
     "url"           TEXT NOT NULL,
+    "repost"        BOOLEAN DEFAULT FALSE NOT NULL,
     "text"          TEXT,
     "createDate"    TIMESTAMP DEFAULT NOW() NOT NULL 
 );
@@ -55,14 +56,13 @@ CREATE TABLE "comments"(
     "createDate"    TIMESTAMP DEFAULT NOW() NOT NULL 
 );
 
-
 CREATE TABLE "shares"(
     "id"            SERIAL PRIMARY KEY,
     "linkId"        INTEGER REFERENCES "links"("id") NOT NULL,
     "userId"        INTEGER REFERENCES "users"("id") NOT NULL,
-    "createDate"    TIMESTAMP DEFAULT NOW() NOT NULL 
+    "RepostId"      INTEGER REFERENCES "users"("id") NOT NULL,
+    "createDate"    TIMESTAMP DEFAULT NOW() NOT NULL
 );
-
 
 CREATE TABLE "followers"(
     "id"            SERIAL PRIMARY KEY,
@@ -73,7 +73,9 @@ CREATE TABLE "followers"(
 
 
 
+-- Comando para adicionar a coluna repost a tabela shares
+--ALTER TABLE shares ADD repost BOOLEAN DEFAULT FALSE NOT NULL;
+--ALTER TABLE links DROP COLUMN repost
+--DROP DATABASE "linkr";
 
-
-DROP DATABASE "linkr";
-DROP TABLE "users","links","trendings","trendingLinks","sessions", "likes", "comments","shares","followers";
+--DROP TABLE "users","links","trendings","trendingLinks","sessions", "likes", "comments","shares","followers";

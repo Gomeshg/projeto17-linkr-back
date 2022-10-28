@@ -30,30 +30,39 @@ async function getLinks(req, res) {
   try {
     const { rows } = await connection.query(`
     
-        SELECT
-            COUNT(likes."linkId") AS "likes",
-            links.id,
-            links.url,
-            links.text,
-            links."createDate",
-            users."userName",
-            users."pictureUrl",
-            users.id AS "userId"
-        FROM links
-            JOIN users
-                ON links."userId" = users.id
-            LEFT JOIN likes
-                ON links.id = likes."linkId"
-                GROUP BY
-                links.id,
-                links.url,
-                links.text,
-                links."createDate",
-                users."userName",
-                users."pictureUrl",
-                users.id
-            ORDER BY "createDate" DESC
-            LIMIT 20;`);
+    SELECT
+      COUNT(likes."linkId") AS "likes",
+      links.repost,
+      links.id,
+      links.url,
+      links.text,
+      links."createDate",
+      users."userName",
+      users."pictureUrl",
+      users.id AS "userId"
+    FROM links
+      JOIN users
+          ON links."userId" = users.id
+      LEFT JOIN likes
+          ON links.id = likes."linkId"
+      JOIN followers
+          ON followers.following = users.id 
+      WHERE followers."userId" = $1 OR users.id=$2
+        GROUP BY
+        links.repost,
+        links.id,
+        links.url,
+        links.text,
+        links."createDate",
+        users."userName",
+        users."pictureUrl",
+        users.id
+    ORDER BY "createDate" DESC
+    LIMIT 20;`,[user.userId, user.userId]);
+
+console.log(rows)
+
+    if(rows.length===0)return res.status(200).send(rows)
 
     const links = await userRepository.linksUser({ id: user.userId });
 
@@ -81,6 +90,7 @@ async function getLinks(req, res) {
 
     res.status(200).send(rows);
   } catch (error) {
+    console.log(error)
     res.status(500).send(error.message);
   }
 }
@@ -159,3 +169,29 @@ async function updateLink(req, res) {
 }
 
 export { postLinks, getLinks, deleteLink, updateLink, getLastLinkId };
+
+
+// SELECT
+// COUNT(likes."linkId") AS "likes",
+// links.id,
+// links.url,
+// links.text,
+// links."createDate",
+// users."userName",
+// users."pictureUrl",
+// users.id AS "userId"
+// FROM links
+// JOIN users
+//     ON links."userId" = users.id
+// LEFT JOIN likes
+//     ON links.id = likes."linkId"
+//     GROUP BY
+//     links.id,
+//     links.url,
+//     links.text,
+//     links."createDate",
+//     users."userName",
+//     users."pictureUrl",
+//     users.id
+// ORDER BY "createDate" DESC
+// LIMIT 20;
