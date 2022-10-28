@@ -124,7 +124,7 @@ async function deleteLink(req, res) {
   }
 }
 
-async function getLastLinkId() {
+async function getLastLinkId(req, res) {
   try {
     const id = await connection.query(
       `SELECT id FROM links ORDER BY "createDate" DESC LIMIT 1;`

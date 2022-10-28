@@ -1,13 +1,13 @@
 import connection from "../database/postgres.js";
-import * as userRepository from '../repositories/userRepository.js'
+import * as userRepository from "../repositories/userRepository.js";
 
-async function getPostsFilteredByUser(req,res){
+async function getPostsFilteredByUser(req, res) {
+  const userId = req.params.id;
 
-    const userId = req.params.id;
+  const myUser = res.localItens;
 
-    const myUser = res.localItens
-
-    const {rows} = await connection.query(`
+  const { rows } = await connection.query(
+    `
          SELECT
             COUNT(likes."linkId") AS "likes",
             links.id,
@@ -32,48 +32,38 @@ async function getPostsFilteredByUser(req,res){
                 users."pictureUrl",
                 users.id
             ORDER BY "createDate" DESC
-            LIMIT 20;`,[userId]);
+            LIMIT 20;`,
+    [userId]
+  );
 
-            const links = await userRepository.linksUser({ id: myUser.userId });
+  const links = await userRepository.linksUser({ id: myUser.userId });
 
-            const link2 = await userRepository.linksUser({});
+  const link2 = await userRepository.linksUser({});
 
-            link2.map((value) => {
-              delete value.createDate;
-              return value;
-            });
-        
-            for (let index = 0; index < rows.length; index++) {
-              rows[index]["likeUser"] = [];
-              for (let i = 0; i < links.length; i++) {
-                if (rows[index].id === links[i].linkId) {
-                  rows[index]["boolean"] = true;
-                }
-              }
-        
-              for (let i = 0; i < link2.length; i++) {
-                if (rows[index].id === link2[i].id) {
-                  rows[index].likeUser.push(link2[i].userName);
-                }
-              }
-
-            }
-    return res.send(rows)
-
+  for (let index = 0; index < rows.length; index++) {
+    rows[index]["likeUser"] = [];
+    for (let i = 0; i < links.length; i++) {
+      if (rows[index].id === links[i].linkId) {
+        rows[index]["boolean"] = true;
+      }
+    }
+  }
+  return res.send(rows);
 }
 
-async function getUserInfo(req,res){
+async function getUserInfo(req, res) {
+  const userId = req.params.id;
 
-    const userId = req.params.id;
+  const myUser = res.localItens;
 
-    const myUser = res.localItens
+  const userInfo = await connection.query(
+    `SELECT "userName" FROM users WHERE "id" = $1;`,
+    [userId]
+  );
 
-    const userInfo = await connection.query(`SELECT "userName" FROM users WHERE "id" = $1;`,[userId]);
+  userInfo.rows[0]["id"] = myUser.userId;
 
-    userInfo.rows[0]["id"]=myUser.userId
-
-    return res.send(userInfo.rows)
-
+  return res.send(userInfo.rows);
 }
 
-export {getPostsFilteredByUser, getUserInfo}
+export { getPostsFilteredByUser, getUserInfo };
