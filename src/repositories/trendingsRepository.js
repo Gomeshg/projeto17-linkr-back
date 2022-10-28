@@ -9,40 +9,37 @@ async function getTrendings() {
 async function filterPostsByHashtag(hashtag) {
   return connection.query(
     `
-    SELECT 
-      tl.id, 
-      t.id AS "trendingId", 
-      t.tag, 
-      t.count, 
-      l.id AS "linkId", 
-      l.url,
-      l.text,
-      l.text, 
-      l."userId", 
-      u."userName" 
-    FROM 
-      "trendingLinks" tl 
-    JOIN 
-      links l 
-    ON 
-      tl."linkId"=l.id 
-    JOIN 
-      trendings t 
-    ON 
-      tl."trendingId"=t.id 
-    JOIN 
-      users u 
-    ON 
-      l."userId"=u.id 
-    JOIN
-      likes lk
-    ON  
-      l.id=lk."linkId"
-    WHERE 
-      t.tag=$1 
-    ORDER BY 
-      tl.id 
-    DESC;`,
+    SELECT
+      COUNT(likes."linkId") AS "likes",
+        links.id,
+        links.url,
+        links.text,
+        links."createDate",
+        users."userName",
+        users."pictureUrl",
+        users.id AS "userId",
+        trendings.tag
+      FROM links
+        JOIN users
+          ON links."userId" = users.id
+        LEFT JOIN likes
+          ON links.id = likes."linkId"
+        JOIN "trendingLinks" AS tl ON links.id=tl."linkId"
+        JOIN trendings on tl."trendingId"=trendings.id
+      WHERE trendings.tag = $1
+      GROUP BY
+        links.id,
+        links.url,
+        links.text,
+        links."createDate",
+        users."userName",
+        users."pictureUrl",
+        users.id,
+        tl.id,
+        trendings.id
+      ORDER BY "createDate" 
+      DESC
+      LIMIT 20;`,
     [hashtag]
   );
 }
