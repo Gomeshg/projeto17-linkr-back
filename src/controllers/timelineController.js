@@ -32,6 +32,7 @@ async function getLinks(req, res) {
     
     SELECT
       COUNT(likes."linkId") AS "likes",
+      links.repost,
       links.id,
       links.url,
       links.text,
@@ -45,9 +46,10 @@ async function getLinks(req, res) {
       LEFT JOIN likes
           ON links.id = likes."linkId"
       JOIN followers
-          ON followers.following = users.id
+          ON followers.following = users.id 
       WHERE followers."userId" = $1 OR users.id=$2
         GROUP BY
+        links.repost,
         links.id,
         links.url,
         links.text,
@@ -57,6 +59,8 @@ async function getLinks(req, res) {
         users.id
     ORDER BY "createDate" DESC
     LIMIT 20;`,[user.userId, user.userId]);
+
+console.log(rows)
 
     if(rows.length===0)return res.status(200).send(rows)
 
@@ -86,6 +90,7 @@ async function getLinks(req, res) {
 
     res.status(200).send(rows);
   } catch (error) {
+    console.log(error)
     res.status(500).send(error.message);
   }
 }

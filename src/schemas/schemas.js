@@ -60,3 +60,12 @@ export const hashtagSchema = joi.object({
     .max(20)
     .required(),
 });
+
+export const sharePostSchema = joi.object({
+  linkId: joi
+    .number()
+    .required(),
+  userId: joi
+  .number()
+  .required()
+});
