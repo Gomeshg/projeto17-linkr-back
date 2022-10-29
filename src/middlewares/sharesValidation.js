@@ -14,6 +14,6 @@ export function validShares(req,res, next){
 
     res.localItens['repostUserId']= req.body.userId
     res.localItens['linkId']= req.body.linkId
-
+    console.log(res.localItens)
     next()
 }

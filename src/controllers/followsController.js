@@ -37,7 +37,7 @@ export async function allFollows(req,res){
     
     try {
         const rows = await userRepository.getItem({table:"followers" ,categori:`followers."userId"` ,iten:userId})
-        
+
         res.send(rows).status(200)
     } catch (error) {
         res.sendStatus(400)

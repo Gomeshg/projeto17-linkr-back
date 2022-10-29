@@ -45,7 +45,7 @@ async function getLinks(req, res) {
           ON links."userId" = users.id
       LEFT JOIN likes
           ON links.id = likes."linkId"
-      JOIN followers
+      LEFT JOIN followers
           ON followers.following = users.id 
       WHERE followers."userId" = $1 OR users.id=$2
         GROUP BY
@@ -88,7 +88,6 @@ async function getLinks(req, res) {
 
     res.status(200).send(rows);
   } catch (error) {
-    console.log(error)
     res.status(500).send(error.message);
   }
 }
