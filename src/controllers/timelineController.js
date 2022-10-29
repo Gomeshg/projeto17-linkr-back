@@ -10,6 +10,7 @@ async function postLinks(req, res) {
     link.text = null;
   }
   try {
+    
     await connection.query(
       `
         INSERT INTO links ("userId", url, text)
@@ -29,7 +30,6 @@ async function getLinks(req, res) {
 
   try {
     const { rows } = await connection.query(`
-    
     SELECT
       COUNT(likes."linkId") AS "likes",
       links.repost,
@@ -59,8 +59,6 @@ async function getLinks(req, res) {
         users.id
     ORDER BY "createDate" DESC
     LIMIT 20;`,[user.userId, user.userId]);
-
-console.log(rows)
 
     if(rows.length===0)return res.status(200).send(rows)
 
