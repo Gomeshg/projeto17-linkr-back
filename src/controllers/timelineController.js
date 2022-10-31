@@ -6,6 +6,8 @@ async function postLinks(req, res) {
   let text = link.text;
   const userId = res.localItens.userId;
 
+  console.log(userId,"  ioioioioio11111  ", link.url,"  ioioioioio  " ,link.text)
+
   if (link.text === "" || link.text === undefined) {
     link.text = null;
   }
