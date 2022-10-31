@@ -71,8 +71,6 @@ CREATE TABLE "followers"(
     "createDate"    TIMESTAMP DEFAULT NOW() NOT NULL 
 );
 
-
-
 -- Comando para adicionar a coluna repost a tabela shares
 --ALTER TABLE shares ADD repost BOOLEAN DEFAULT FALSE NOT NULL;
 --ALTER TABLE links DROP COLUMN repost

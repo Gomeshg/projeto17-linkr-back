@@ -42,9 +42,7 @@ async function postComment(req, res) {
     const linkId = req.body.linkId;
     const userId = req.body.userId;
     const comment = req.body.comment;
-    console.log(linkId)
-    console.log(userId)
-    console.log(comment)
+   
 
     const { auth } = req.headers;
     const token = auth?.replace("Bearer ", "");

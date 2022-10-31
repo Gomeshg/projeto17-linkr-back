@@ -6,10 +6,13 @@ async function postLinks(req, res) {
   let text = link.text;
   const userId = res.localItens.userId;
 
+  console.log(userId,"  ioioioioio11111  ", link.url,"  ioioioioio  " ,link.text)
+
   if (link.text === "" || link.text === undefined) {
     link.text = null;
   }
   try {
+    
     await connection.query(
       `
         INSERT INTO links ("userId", url, text)
@@ -29,7 +32,6 @@ async function getLinks(req, res) {
 
   try {
     const { rows } = await connection.query(`
-    
     SELECT
       COUNT(likes."linkId") AS "likes",
       links.repost,
@@ -45,7 +47,7 @@ async function getLinks(req, res) {
           ON links."userId" = users.id
       LEFT JOIN likes
           ON links.id = likes."linkId"
-      JOIN followers
+      LEFT JOIN followers
           ON followers.following = users.id 
       WHERE followers."userId" = $1 OR users.id=$2
         GROUP BY
@@ -59,8 +61,6 @@ async function getLinks(req, res) {
         users.id
     ORDER BY "createDate" DESC
     LIMIT 20;`,[user.userId, user.userId]);
-
-console.log(rows)
 
     if(rows.length===0)return res.status(200).send(rows)
 
@@ -90,7 +90,6 @@ console.log(rows)
 
     res.status(200).send(rows);
   } catch (error) {
-    console.log(error)
     res.status(500).send(error.message);
   }
 }

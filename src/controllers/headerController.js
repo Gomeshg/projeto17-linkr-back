@@ -14,7 +14,6 @@ try {
     const usersFilteredByChars = await connection.query(`SELECT * FROM users WHERE users.id !=$1 AND users."userName" ILIKE $2;`,[ obj.userId,`${partOfUsername}%`]);
     
     const usersFilter = await userRepository.getItem({table:"followers", categori:`"userId"`,iten: `${obj.userId} LIMIT 10` })
-    console.log(usersFilteredByChars.rows)
 
     usersFilteredByChars.rows.map((value, index)=>{
         usersFilter.map((i)=>{
