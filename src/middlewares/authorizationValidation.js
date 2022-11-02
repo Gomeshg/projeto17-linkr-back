@@ -12,6 +12,7 @@ export default async function (req, res, next){
     };
 
     const token = req.headers.authorization.replace('Bearer ', '');
+
     try {
 
         const rows = await userRepository.getItem({table:"sessions", categori:"token", iten: `'${token}'` })

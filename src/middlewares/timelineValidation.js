@@ -4,7 +4,6 @@ async function isItUrl(req, res, next) {
     const regex = new RegExp(expression);
 
     if (url.match(regex)) {
-        console.log("Url verificada");
     } else {
         return res.sendStatus(422);
     };

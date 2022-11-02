@@ -1,6 +1,6 @@
 import * as userRepository from '../repositories/userRepository.js' 
 
-export default async function shares(req,res){
+export async function shares(req,res){
 
 
     try {
@@ -10,11 +10,7 @@ export default async function shares(req,res){
         if(linkId!==0 && repostUserId!==0){
 
             await userRepository.insert({localItens: `shares("linkId","userId","RepostId")`, iten:[linkId, userId , repostUserId]})
-            
-           // const link = await userRepository.getItem({table:"links", categori:"id",iten:linkId})
-            
-           // await userRepository.insert({localItens: `links("userId", url ,repost, text )`, iten:[userId, link[0].url, true, link[0].text]})
-        
+                 
         }
 
         const cont = await userRepository.getItem({table:"shares", categori:`"linkId"`,iten:linkId })
@@ -23,9 +19,27 @@ export default async function shares(req,res){
 
         res.send({cont:i}).status(200)
     
+
+        
     } catch (error) {
         res.sendStatus(400)
         
     }
-
 } 
+
+export async function deleteShares(req,res){
+    
+    const {userId} = res.localItens
+
+    const deletId = req.params.id
+    
+    try {
+
+        const cont = await userRepository.deleteShare({id:deletId , userId:userId })
+
+        res.sendStatus(200)
+    } catch (error) {
+        res.sendStatus(400)
+        
+    }
+}

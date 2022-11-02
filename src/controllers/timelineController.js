@@ -6,13 +6,10 @@ async function postLinks(req, res) {
   let text = link.text;
   const userId = res.localItens.userId;
 
-  console.log(userId,"  ioioioioio11111  ", link.url,"  ioioioioio  " ,link.text)
-
   if (link.text === "" || link.text === undefined) {
     link.text = null;
   }
   try {
-    
     await connection.query(
       `
         INSERT INTO links ("userId", url, text)
@@ -33,22 +30,24 @@ async function getLinks(req, res) {
   try {
     const { rows } = await connection.query(`
     SELECT
-      COUNT(likes."linkId") AS "likes",
-      links.repost,
-      links.id,
-      links.url,
-      links.text,
-      links."createDate",
-      users."userName",
-      users."pictureUrl",
-      users.id AS "userId"
+        COUNT(likes) AS "likes",
+        links.repost,
+        links.id,
+        links.url,
+        links.text,
+        links."createDate",
+        users."userName",
+        users."pictureUrl",
+        users.id AS "userId"
     FROM links
       JOIN users
           ON links."userId" = users.id
       LEFT JOIN likes
           ON links.id = likes."linkId"
+        LEFT JOIN shares
+          ON links.id = shares."linkId"
       LEFT JOIN followers
-          ON followers.following = users.id 
+          ON followers.following = users.id
       WHERE followers."userId" = $1 OR users.id=$2
         GROUP BY
         links.repost,
@@ -68,25 +67,89 @@ async function getLinks(req, res) {
 
     const link2 = await userRepository.linksUser({});
 
+    const link3 = await connection.query(`
+    SELECT
+    users."userName",
+    users."pictureUrl",
+    users.id AS "originId",
+    links.id,
+    links.url,
+    links.text,
+    links."createDate",
+    users."userName" AS "origShar" ,
+    i."pictureUrl",
+    i.id AS "userId",
+    i."userName" ,
+    shares.id AS "shareId"
+        FROM followers
+        JOIN users
+            ON users.id = followers.following
+        JOIN shares
+            ON followers.following = shares."userId"
+        LEFT JOIN links
+            ON shares."linkId" = links.id
+        LEFT JOIN users i
+            ON i.id = shares."RepostId" 
+        WHERE followers."userId" = $1 OR users.id= $2
+    
+            ORDER BY "createDate" DESC
+            LIMIT 20;
+
+            `,[user.userId,user.userId])
+
+
     link2.map((value) => {
       delete value.createDate;
       return value;
     });
 
+    // console.log(links)
+    // console.log(link2)
+    // console.log(link3.rows)
+    // console.log(rows)
+
+    for (let i = 0; i < link3.rows.length; i++) {
+      let c = 0;
+      for (let r = 0; r < link2.length; r++) {
+        if(link3.rows[i].id === link2[r].id){
+        c += link2[r].likes !=='0' ? Number(link2[r].likes) : 0
+        link3.rows[i].likes = c
+        }
+      }
+    }
+   //console.log(link3.rows)
+
     for (let index = 0; index < rows.length; index++) {
       rows[index]["likeUser"] = [];
+      for (let i = 0; i < link3.rows.length; i++) {
+
+        link3.rows[i]["likeUser"] = []  
+
+        if(Date.parse(link3.rows[i].createDate)<=Date.parse(rows[index].createDate) ){
+          rows.splice(index,0,link3.rows[i])
+        }else{
+          rows.splice(index,0,link3.rows[i])
+        }
+        link3.rows.splice(i,1)
+          
+
+      }
       for (let i = 0; i < links.length; i++) {
         if (rows[index].id === links[i].linkId) {
           rows[index]["boolean"] = true;
         }
       }
-
+      let c = 0;
       for (let i = 0; i < link2.length; i++) {
         if (rows[index].id === link2[i].id) {
-          rows[index].likeUser.push(link2[i].userName);
+          c += link2[i].likes !=='0' ? Number(link2[i].likes) : 0
+          link2[i].userName !== null ? rows[index].likeUser.push(link2[i].userName): '';
+          rows[index].likes = c
         }
+          
       }
     }
+console.log(rows , link2)
 
     res.status(200).send(rows);
   } catch (error) {
@@ -98,6 +161,7 @@ async function deleteLink(req, res) {
   const id = req.params.id;
   const { auth } = req.headers;
   const token = auth?.replace("Bearer ", "");
+  try {
 
   const rows = await userRepository.getItem({
     table: "sessions",
@@ -105,12 +169,21 @@ async function deleteLink(req, res) {
     iten: `'${token}'`,
   });
 
+  
   if (!rows) {
     return res.status(401).send("Sessão não encontrada, favor relogar.");
   }
-
-  try {
-    await connection.query(
+  
+  await connection.query(
+    `
+          DELETE FROM shares
+          WHERE "linkId" = $1
+          
+          `,
+    [id]
+  );  
+  
+  await connection.query(
       `
             DELETE FROM links
             WHERE id = $1
@@ -168,29 +241,3 @@ async function updateLink(req, res) {
 }
 
 export { postLinks, getLinks, deleteLink, updateLink, getLastLinkId };
-
-
-// SELECT
-// COUNT(likes."linkId") AS "likes",
-// links.id,
-// links.url,
-// links.text,
-// links."createDate",
-// users."userName",
-// users."pictureUrl",
-// users.id AS "userId"
-// FROM links
-// JOIN users
-//     ON links."userId" = users.id
-// LEFT JOIN likes
-//     ON links.id = likes."linkId"
-//     GROUP BY
-//     links.id,
-//     links.url,
-//     links.text,
-//     links."createDate",
-//     users."userName",
-//     users."pictureUrl",
-//     users.id
-// ORDER BY "createDate" DESC
-// LIMIT 20;
