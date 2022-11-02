@@ -69,6 +69,22 @@ export async function updateIten({table ,colun ,value, id}){
     }
   }
 
+  export async function deleteShare({id ,userId}){
+
+    try {
+      
+      const {rows} = await connection.query(`DELETE FROM shares WHERE id= $1 AND "userId"=$2 ;`, [ id, userId ])
+      
+      return rows;
+      
+    } catch (error) {
+      
+      return error;    
+    }
+  }
+
+
+
   export async function deleteFollow({userId ,following}){
 
     try {
@@ -123,20 +139,29 @@ export async function linksUser({id}){
       return rows;
     }
     const {rows} = await connection.query(`
-        SELECT
-          users."pictureUrl",
-          users.id AS "IDuser",
-          links.id,
+    SELECT
+    COUNT(likes.id) AS "likes",
+    users."userName",
+    links.id,
+    links."createDate"
+  FROM links
+    LEFT JOIN likes
+      ON links.id = likes."linkId"
+    LEFT JOIN users
+      ON users.id = likes."userId"
+      
+      
+      GROUP BY
           users."userName",
-          likes."createDate"
-        FROM likes
-          JOIN links
-            ON links.id = likes."linkId"
-          JOIN users
-            ON likes."userId" = users.id
-            GROUP BY users."userName", likes."createDate",users."pictureUrl",links.id,users.id
-        ORDER BY "createDate" DESC
-        ; `)
+
+        links."createDate",
+        links.id
+  
+  ORDER BY links."createDate" DESC
+  LIMIT 20
+ ;`)
+
+
         return rows
   
     } catch (error) {

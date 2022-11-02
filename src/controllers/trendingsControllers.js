@@ -3,7 +3,6 @@ import trendingsRepository from "../repositories/trendingsRepository.js";
 import * as userRepository from "../repositories/userRepository.js";
 
 async function insert(req, res) {
-  // const { hashtag } = req.body;
   try {
     const validation = hashtagSchema.validate(req.body, { abortEarly: false });
     if (validation.error) {
