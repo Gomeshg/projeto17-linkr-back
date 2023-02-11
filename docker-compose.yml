@@ -1,0 +1,31 @@
+version: '3'
+services:
+  app:
+    container_name: linkr_developer
+    build: .
+    env_file:
+      - .env
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - linkr
+    volumes:
+      - .:/app
+
+  linkr:
+    image: postgres:13
+    container_name: linkr
+    env_file:
+      - .env
+    ports:
+      - 2345:${POSTGRES_PORT}
+    restart: always
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DATABASE}
+
+volumes:
+  postgres:
+

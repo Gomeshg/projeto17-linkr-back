@@ -16,6 +16,7 @@ import shareRout from './routers/sharesRouter.js'
 dotenv.config();
 
 const server = express();
+
 server.use(json());
 server.use(cors());
 

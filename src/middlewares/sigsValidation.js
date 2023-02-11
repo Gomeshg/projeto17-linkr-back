@@ -4,7 +4,8 @@ import bcrypt from 'bcrypt';
 
 async function validUser({ res , table , categori, iten }){
     try {
-        
+        console.log( table , categori, iten );
+
     const rows = await userRepository.getItem({table:table, categori:categori, iten: iten }); 
 
     return rows;
@@ -23,16 +24,17 @@ export async function signInValidation(req, res, next){
 
     const valid = schemas.signinSchema.validate(req.body,{abortEarly: false})
 
-    if (valid.error) {
-
-        const error = valid.error.details.map(details => details.message);
     
+    if (valid.error) {
+        
+        const error = valid.error.details.map(details => details.message);
+        
         return res.status(422).send(error);
     };
     try {
         
     const rows = await validUser({res:res,  table: "users" ,categori:"email" , iten:`'${email}'` , erro:401})
-
+        
     if(rows.length===0) return res.sendStatus(401);
 
     const comparer = bcrypt.compareSync(password, rows[0].passwordHash )

@@ -1,5 +1,3 @@
-CREATE DATABASE "linkr";
-
 CREATE TABLE "users"(
     "id"            SERIAL PRIMARY KEY,
     "userName"      VARCHAR(50) UNIQUE NOT NULL,
